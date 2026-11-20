@@ -40,6 +40,8 @@ def run() -> None:
     width, height = verify(blob)
     TARGET.parent.mkdir(parents=True, exist_ok=True)
     TARGET.write_bytes(blob)
+    # Read the copy back: a short or failed write must stop the run, not ship a broken image.
+    assert TARGET.read_bytes() == blob, f"{TARGET} does not match entry.png after the write"
     print(f"wrote {TARGET} ({width}x{height}, {len(blob)} bytes)")
 
 
